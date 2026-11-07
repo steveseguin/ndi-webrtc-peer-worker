@@ -184,7 +184,8 @@ void NDIReader::run() {
                 // Free the original buffer
                 NDIlib_recv_free_audio_v2(_pNDI_recv, &audio_frame);
                 if (audio_frame.p_data != audio_frame_extracted.p_data) {
-                    delete audio_frame_extracted.p_data;
+                    // extractAudioFrame allocates channel subsets as a byte array.
+                    delete[] reinterpret_cast<uint8_t *>(audio_frame_extracted.p_data);
                 }
 
                 // send
@@ -305,4 +306,5 @@ NDIReader::Configuration::Configuration(json payload) {
 
 
 }
+
 
